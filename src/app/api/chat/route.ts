@@ -9,7 +9,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Message is required" }, { status: 400 });
     }
 
-    const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GEMINI_API_KEY });
+    const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GEMINI_API_KEY;
+    console.log("Using API Key (present):", !!apiKey);
+
+    const ai = new GoogleGenAI({ apiKey: apiKey || "" });
 
     // Format history for Gemini API
     const formattedHistory = (history || []).map((msg: any) => ({
@@ -24,13 +27,10 @@ export async function POST(req: Request) {
     });
 
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-1.5-flash",
       contents: formattedHistory,
       config: {
         systemInstruction: "You are a DSA tutor. Always explain step-by-step. Prefer C++ code. First give hint, then approach, then code. Focus on patterns (two pointers, sliding window, DP). Ask follow-up questions.",
-        thinkingConfig: {
-          thinkingLevel: "LOW" as any // Bypass strict TS enum check if needed
-        }
       }
     });
 
