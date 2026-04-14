@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     });
 
     const response = await ai.models.generateContent({
-      model: "gemini-1.5-flash",
+      model: "gemini-2.5-flash",
       contents: formattedHistory,
       config: {
         systemInstruction: "You are a DSA tutor. Always explain step-by-step. Prefer C++ code. First give hint, then approach, then code. Focus on patterns (two pointers, sliding window, DP). Ask follow-up questions.",
